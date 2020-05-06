@@ -6,6 +6,13 @@
   "version": "com.visualizadorLavado",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "author": "Apache Cordova Team",
-  "icons": [],
-  "start_url": "index.html"
+  "icons": [
+    {
+      "src": "www/img/logo.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
+  "start_url": "index.html",
+  "theme_color": "#2196f3"
 }

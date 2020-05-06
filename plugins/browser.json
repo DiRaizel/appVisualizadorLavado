@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.visualizadorLavado"
+    },
+    "phonegap-plugin-speech-synthesis": {
+      "PACKAGE_NAME": "com.visualizadorLavado"
     }
   },
   "dependent_plugins": {}
