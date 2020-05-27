@@ -49,13 +49,13 @@ document.addEventListener('deviceready', function () {
             //
             localStorage.ipServidor = ip;
             ipServidor = ip;
-            urlServer = 'http://' + ip + '/VisualizadorLavadoPhp/';
+            urlServer = 'http://' + ip + '/phpVisualizadores/VisualizadorLavadoPhp/';
             comprobarEmpresa();
         });
     } else {
         //
         ipServidor = localStorage.ipServidor;
-        urlServer = 'http://' + ipServidor + '/VisualizadorLavadoPhp/';
+        urlServer = 'http://' + ipServidor + '/phpVisualizadores/VisualizadorLavadoPhp/';
         comprobarEmpresa();
     }
 });
@@ -101,7 +101,7 @@ function editarIpServidor() {
         //
         localStorage.ipServidor = ip;
         ipServidor = ip;
-        urlServer = 'http://' + ip + '/VisualizadorLavadoPhp/';
+        urlServer = 'http://' + ip + '/phpVisualizadores/VisualizadorLavadoPhp/';
         comprobarEmpresa();
     });
 }
