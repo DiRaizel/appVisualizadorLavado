@@ -5,7 +5,7 @@ var app = new Framework7({
     // App Name
     name: 'My App',
     // App id
-    id: 'visualizador.com',
+    id: 'com.com.visualizadorLavado',
     // Enable swipe panel
     panel: {
         swipe: 'left'
@@ -92,8 +92,6 @@ function iniciar() {
                     $$('#hora').html(data.hora);
                 });
     }, 5000);
-    //
-    actualizarTurnos();
 }
 
 //
@@ -198,6 +196,8 @@ function establecerUrls() {
     consultarPersonas();
     cargarConfig();
     cargarVideos();
+    actualizarTurnos();
+    cargarMensajes();
 }
 
 //
@@ -234,6 +234,8 @@ function actualizarVideos() {
     //
     if (arrayV.length > 0) {
         //
+        $$('#imagenV').css('display', 'none');
+        //
         var vol = (arrayV[videoA]['volumen'] > 9) ? 1 : parseFloat("0." + arrayV[videoA]['volumen']);
         //
         videoR.volume = vol;
@@ -246,12 +248,7 @@ function actualizarVideos() {
         videoA++;
     } else {
         //
-        document.getElementById("video").innerHTML = '<source src="video/video.mp4" type="video/mp4">';
-        //
-        videoR.volume = 1;
-        //
-        videoR.load();
-        videoR.play();
+        $$('#video').css('display', 'none');
     }
     //
     setInterval(function () {
@@ -282,6 +279,11 @@ function cargarConfig() {
                     document.getElementById("divFecha").style.fontSize = valorT + 'px';
                     document.getElementById("mesaje").style.fontSize = data[0]['tamanoLetra'] + 'px';
                     //
+                    if (data[0]['imagen'] !== '') {
+                        //
+                        document.getElementById("imagenV").setAttribute('src', urlImagen + data[0]['imagen']);
+                    }
+                    //
                     if (data[0]['nombrelogo'] !== '') {
                         //
                         document.getElementById("logoCambiar").setAttribute('src', urlImagen + data[0]['nombrelogo']);
@@ -300,7 +302,7 @@ function cargarConfig() {
 //
 function actualizarTurnos() {
     //
-    var intervaloTV = setInterval(function () {
+    setInterval(function () {
         //
         if (arrayTV.length > 0) {
             //
@@ -363,149 +365,160 @@ var controlAT = 0;
 //
 function consultarPersona() {
     //
-    app.request.post(urlServer + 'Read/consultarPersona', {idPer: arrayT[controlAT]['idPer']},
-            function (rsp) {
-                //
-                var data = JSON.parse(rsp);
-                //
-                if (data !== 2) {
+    if (arrayT.length > 0) {
+        //
+        app.request.post(urlServer + 'Read/consultarPersona', {idPer: arrayT[controlAT]['idPer']},
+                function (rsp) {
                     //
-                    if (data[0]['estado'] === '1') {
+                    var data = JSON.parse(rsp);
+                    //
+                    if (data !== 2) {
                         //
-                        arrayT.splice(controlAT, 1);
-                        //
-                        for (var i = 0; i < arrayTV.length; i++) {
-                            //
-                            if (arrayTV[i]['idPer'] === arrayT[controlAT]['idPer']) {
-                                //
-                                arrayTV.splice(i, 1);
-                            }
-                        }
-                        //
-                        consultarPersona();
-                    } else {
-                        //
-                        if (arrayTV.length > 0) {
-                            //
-                            var j = -1;
+                        if (data[0]['estado'] === '1') {
                             //
                             for (var i = 0; i < arrayTV.length; i++) {
                                 //
                                 if (arrayTV[i]['idPer'] === arrayT[controlAT]['idPer']) {
                                     //
-                                    j = i;
+                                    arrayTV.splice(i, 1);
+                                    arrayT.splice(controlAT, 1);
                                 }
                             }
                             //
-                            if (j !== -1) {
-                                //
-                                while (j >= 0) {
-                                    //
-                                    if (j === 0) {
-                                        //
-                                        arrayTV[j] = arrayT[controlAT];
-                                    } else {
-                                        //
-                                        arrayTV[j] = arrayTV[j - 1];
-                                    }
-                                    //
-                                    j--;
-                                }
-                            } else {
-                                //
-                                var k = arrayTV.length;
-                                //
-                                if (k > 4) {
-                                    //
-                                    k = 4;
-                                }
-                                //
-                                while (k > 0) {
-                                    //
-                                    arrayTV[k] = arrayTV[k - 1];
-                                    //
-                                    k--;
-                                    //
-                                    if (k === 0) {
-                                        //
-                                        arrayTV[k] = arrayT[controlAT];
-                                    }
-                                }
-                            }
+                            consultarPersona();
                         } else {
-                            arrayTV[0] = arrayT[controlAT];
-                        }
-                        //
-                        controlAT++;
-                        //
-                        if (controlAT === arrayT.length) {
                             //
-                            controlAT = 0;
-                        }
-                        //
-                        var controlColorDiv = false;
-                        var controlColorDivT = 0;
-                        //
-                        var intervaloC = setInterval(function () {
-                            //
-                            controlColorDivT++;
-                            //
-                            if (controlColorDiv) {
+                            if (arrayTV.length > 0) {
                                 //
-                                document.getElementById("conttL").style.background = "linear-gradient(to bottom, rgba(43,123,160,1) 0%, rgba(16,63,84,1) 100%)";
-                                document.getElementById("divcontt").style.border = "2px #256e90 solid";
+                                var j = -1;
                                 //
-                                controlColorDiv = false;
+                                for (var i = 0; i < arrayTV.length; i++) {
+                                    //
+                                    if (arrayTV[i]['idPer'] === arrayT[controlAT]['idPer']) {
+                                        //
+                                        j = i;
+                                    }
+                                }
+                                //
+                                if (j !== -1) {
+                                    //
+                                    while (j >= 0) {
+                                        //
+                                        if (j === 0) {
+                                            //
+                                            arrayTV[j] = arrayT[controlAT];
+                                        } else {
+                                            //
+                                            arrayTV[j] = arrayTV[j - 1];
+                                        }
+                                        //
+                                        j--;
+                                    }
+                                } else {
+                                    //
+                                    var k = arrayTV.length;
+                                    //
+                                    if (k > 4) {
+                                        //
+                                        k = 4;
+                                    }
+                                    //
+                                    while (k > 0) {
+                                        //
+                                        arrayTV[k] = arrayTV[k - 1];
+                                        //
+                                        k--;
+                                        //
+                                        if (k === 0) {
+                                            //
+                                            arrayTV[k] = arrayT[controlAT];
+                                        }
+                                    }
+                                }
                             } else {
-                                //
-                                document.getElementById("conttL").style.background = "linear-gradient(to bottom, rgba(156,34,46,1) 0%, rgba(156,34,46,1) 12%, rgba(221,75,86,1) 100%)";
-                                document.getElementById("divcontt").style.border = "2px #c93e4a solid";
-                                //
-                                controlColorDiv = true;
+                                arrayTV[0] = arrayT[controlAT];
                             }
                             //
-                            if (controlColorDivT >= 10) {
+                            controlAT++;
+                            //
+                            if (controlAT === arrayT.length) {
                                 //
-                                document.getElementById("conttL").style.background = "linear-gradient(to bottom, rgba(43,123,160,1) 0%, rgba(16,63,84,1) 100%)";
-                                document.getElementById("divcontt").style.border = "2px #256e90 solid";
-                                //
-                                clearInterval(intervaloC);
-                                //
-                                controlColorDivT = 0;
+                                controlAT = 0;
                             }
-                        }, 1000);
-                        //
-                        var VolumenVoz = 0;
-                        //
-                        VolumenVoz = (parseInt(arrayC.volumenVoz));
-                        VolumenVoz = (VolumenVoz > 9) ? 1 : parseFloat("0." + VolumenVoz);
-                        //
-                        var video = document.getElementById("video");
-                        video.muted = true;
-                        //
-                        mensaje = "atencion " + arrayTV[0]['nombre'] + " recuerde labarse las manos";
-                        voz(mensaje, VolumenVoz);
-                        //
-                        var intervaloV = setInterval(function () {
                             //
-                            video.muted = false;
+                            var controlColorDiv = false;
+                            var controlColorDivT = 0;
                             //
-                            clearInterval(intervaloV);
-                        }, 7000);
-                        //
-                        siguientePos();
+                            var intervaloC = setInterval(function () {
+                                //
+                                controlColorDivT++;
+                                //
+                                if (controlColorDiv) {
+                                    //
+                                    document.getElementById("conttL").style.background = "linear-gradient(to bottom, rgba(43,123,160,1) 0%, rgba(16,63,84,1) 100%)";
+                                    document.getElementById("divcontt").style.border = "2px #256e90 solid";
+                                    //
+                                    controlColorDiv = false;
+                                } else {
+                                    //
+                                    document.getElementById("conttL").style.background = "linear-gradient(to bottom, rgba(156,34,46,1) 0%, rgba(156,34,46,1) 12%, rgba(221,75,86,1) 100%)";
+                                    document.getElementById("divcontt").style.border = "2px #c93e4a solid";
+                                    //
+                                    controlColorDiv = true;
+                                }
+                                //
+                                if (controlColorDivT >= 10) {
+                                    //
+                                    document.getElementById("conttL").style.background = "linear-gradient(to bottom, rgba(43,123,160,1) 0%, rgba(16,63,84,1) 100%)";
+                                    document.getElementById("divcontt").style.border = "2px #256e90 solid";
+                                    //
+                                    clearInterval(intervaloC);
+                                    //
+                                    controlColorDivT = 0;
+                                }
+                            }, 1000);
+                            //
+                            var VolumenVoz = 0;
+                            //
+                            VolumenVoz = (parseInt(arrayC.volumenVoz));
+                            VolumenVoz = (VolumenVoz > 9) ? 1 : parseFloat("0." + VolumenVoz);
+                            //
+                            var video = document.getElementById("video");
+                            video.muted = true;
+                            //
+                            mensaje = "atencion " + arrayTV[0]['nombre'] + " recuerde labarse las manos";
+                            voz(mensaje, VolumenVoz);
+                            //
+                            var intervaloV = setInterval(function () {
+                                //
+                                video.muted = false;
+                                //
+                                clearInterval(intervaloV);
+                            }, 7000);
+                            //
+                            siguientePos();
+                        }
                     }
-                }
-            }, function (error) {
+                }, function (error) {
+            //
+            siguientePos();
+        });
+    } else {
         //
-        siguientePos();
-    });
+        for (var w = 0; w < 5; w++) {
+            //
+            $$('#empleado' + w).html('');
+        }
+    }
 }
+
+//
+var intervaloP;
 
 //
 function siguientePos() {
     //
-    var intervaloP = setInterval(function () {
+    intervaloP = setInterval(function () {
         //
         consultarPersona();
         //
@@ -522,4 +535,85 @@ function siguienteTruno() {
         //
         clearInterval(intervaloT2);
     }, 10000);
+}
+
+//
+var arrayM = [];
+var controlM = 0;
+
+//
+function cargarMensajes() {
+    //
+    if (arrayM.length > 0) {
+        //
+        leerMensajes();
+    } else {
+        //
+        app.request.post(urlServer + 'Read/cargarMensajes', {visualizador: visualizador, empresa: idEmpresa},
+                function (rsp) {
+                    //
+                    var data = JSON.parse(rsp);
+                    //
+                    if (data !== 2) {
+                        //
+                        arrayM = data;
+                        //
+                        cicloMensajes();
+                    } else {
+                        //
+                        cicloMensajes();
+                    }
+                }, function (error) {
+            //
+            cicloMensajes();
+        });
+    }
+}
+
+//
+function cicloMensajes() {
+    //
+    var intervaloM = setInterval(function () {
+        //
+        cargarMensajes();
+        //
+        clearInterval(intervaloM);
+    }, 10000);
+}
+
+function leerMensajes() {
+    //
+    if (arrayM.length > 0) {
+        //
+        if (controlM < arrayM.length) {
+            //
+            clearInterval(intervaloP);
+            //
+            var VolumenVoz = 0;
+            //
+            VolumenVoz = (parseInt(arrayC.volumenVoz));
+            VolumenVoz = (VolumenVoz > 9) ? 1 : parseFloat("0." + VolumenVoz);
+            //
+            var video = document.getElementById("video");
+            video.muted = true;
+            //
+            mensaje = arrayM[controlM]['mensaje'];
+            voz(mensaje, VolumenVoz);
+            //
+            controlM++;
+            //
+            var intervaloM = setInterval(function () {
+                //
+                cargarMensajes();
+                //
+                clearInterval(intervaloM);
+            }, 10000);
+        } else {
+            //
+            arrayM = [];
+            controlM = 0;
+            cargarMensajes();
+            siguientePos();
+        }
+    }
 }

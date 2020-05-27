@@ -92,9 +92,6 @@ function iniciar() {
                     $$('#hora').html(data.hora);
                 });
     }, 5000);
-    //
-    actualizarTurnos();
-    cargarMensajes();
 }
 
 //
@@ -199,6 +196,8 @@ function establecerUrls() {
     consultarPersonas();
     cargarConfig();
     cargarVideos();
+    actualizarTurnos();
+    cargarMensajes();
 }
 
 //

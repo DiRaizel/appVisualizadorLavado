@@ -26,8 +26,8 @@
       "phonegap-plugin-speech-synthesis": {}
     },
     "platforms": [
-      "android",
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }
