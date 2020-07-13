@@ -5,7 +5,7 @@ var app = new Framework7({
     // App Name
     name: 'My App',
     // App id
-    id: 'com.com.visualizadorLavado',
+    id: 'com.visualizadorLavado',
     // Enable swipe panel
     panel: {
         swipe: 'left'
@@ -509,6 +509,8 @@ function consultarPersona() {
             //
             $$('#empleado' + w).html('');
         }
+        //
+        consultarPersonas();
     }
 }
 
@@ -587,27 +589,38 @@ function leerMensajes() {
         //
         if (controlM < arrayM.length) {
             //
-            clearInterval(intervaloP);
-            //
-            var VolumenVoz = 0;
-            //
-            VolumenVoz = (parseInt(arrayC.volumenVoz));
-            VolumenVoz = (VolumenVoz > 9) ? 1 : parseFloat("0." + VolumenVoz);
-            //
-            var video = document.getElementById("video");
-            video.muted = true;
-            //
-            mensaje = arrayM[controlM]['mensaje'];
-            voz(mensaje, VolumenVoz);
-            //
-            controlM++;
-            //
-            var intervaloM = setInterval(function () {
+            if (arrayM[controlM]['mensaje'] === 'Actualizar configtv') {
+                //
+                cargarConfig();
+                cargarVideos();
+                //
+                controlM++;
                 //
                 cargarMensajes();
+            } else {
                 //
-                clearInterval(intervaloM);
-            }, 10000);
+                clearInterval(intervaloP);
+                //
+                var VolumenVoz = 0;
+                //
+                VolumenVoz = (parseInt(arrayC.volumenVoz));
+                VolumenVoz = (VolumenVoz > 9) ? 1 : parseFloat("0." + VolumenVoz);
+                //
+                var video = document.getElementById("video");
+                video.muted = true;
+                //
+                mensaje = arrayM[controlM]['mensaje'];
+                voz(mensaje, VolumenVoz);
+                //
+                controlM++;
+                //
+                var intervaloM = setInterval(function () {
+                    //
+                    cargarMensajes();
+                    //
+                    clearInterval(intervaloM);
+                }, 10000);
+            }
         } else {
             //
             arrayM = [];
